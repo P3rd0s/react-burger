@@ -19,6 +19,9 @@ export const App: FC = () => {
 		const getIngredients = async () => {
 			try {
 				const res = await fetch(INGREDIENT_URL);
+				if (!res.ok) {
+					throw Error(`Код ошибки - ${res.status}`);
+				}
 				const data = await res.json();
 				if (data.success) {
 					setIngredients(data.data);

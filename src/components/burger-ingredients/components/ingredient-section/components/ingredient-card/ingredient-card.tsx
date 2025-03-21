@@ -7,6 +7,7 @@ import {
 import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import { clsx } from 'clsx';
 import IngredientDetails from './components/ingredient-details/ingredient-details';
+import Modal from '@shared/components/modal/modal';
 
 type IngredientCardProps = {
 	count?: number;
@@ -32,10 +33,12 @@ const IngredientCard: FC<IngredientCardProps> = ({
 	}, [onIngredientSelected, ingredientInfo]);
 
 	const ingredientInfoModal = (
-		<IngredientDetails
-			ingredient={ingredientInfo as IngredientInfo}
-			onModalClose={handleCloseInfo}
-		/>
+		<Modal
+			onClose={handleCloseInfo}
+			header='Детали ингредиента'
+			className={clsx('pt-10 pl-10 pr-10 pb-15', s.modal)}>
+			<IngredientDetails ingredient={ingredientInfo as IngredientInfo} />
+		</Modal>
 	);
 
 	return (

@@ -1,18 +1,12 @@
 import React, { FC } from 'react';
-import Modal from '@shared/components/modal/modal';
 import s from './ingredient-details.module.scss';
-import { clsx } from 'clsx';
 import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 
 const IngredientDetails: FC<{
-	onModalClose: () => void;
 	ingredient: IngredientInfo;
-}> = ({ onModalClose, ingredient }) => {
+}> = ({ ingredient }) => {
 	return (
-		<Modal
-			onClose={onModalClose}
-			header='Детали ингредиента'
-			className={clsx('pt-10 pl-10 pr-10 pb-15', s.modal)}>
+		<>
 			<img
 				src={ingredient.image}
 				className='mb-4'
@@ -43,7 +37,7 @@ const IngredientDetails: FC<{
 					</p>
 				</li>
 			</ul>
-		</Modal>
+		</>
 	);
 };
 

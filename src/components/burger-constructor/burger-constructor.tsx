@@ -8,6 +8,7 @@ import s from './burger-constructor.module.scss';
 import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import { clsx } from 'clsx';
 import OrderDetails from '@components/burger-constructor/components/order-details/order-details';
+import Modal from '@shared/components/modal/modal';
 
 interface BurgerConstructorProps {
 	burgerIngredients: IngredientInfo[];
@@ -44,7 +45,11 @@ const BurgerConstructor: FC<BurgerConstructorProps> = ({
 		setIsOrderShown(false);
 	}, [setIsOrderShown]);
 
-	const orderModal = <OrderDetails onModalClose={handleCloseOrder} />;
+	const orderModal = (
+		<Modal onClose={handleCloseOrder} className={s.modal}>
+			<OrderDetails />
+		</Modal>
+	);
 
 	return (
 		<>
