@@ -1,0 +1,16 @@
+.ingredients {
+	flex-basis: 100%;
+}
+
+.title {
+	text-align: start;
+}
+
+.tabs {
+	display: flex;
+}
+
+.sections {
+	overflow: scroll;
+	max-height: 65vh;
+}
