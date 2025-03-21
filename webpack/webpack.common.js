@@ -81,6 +81,8 @@ module.exports = {
 			'@components': path.resolve(__dirname, '..', './src/components'),
 			'@services': path.resolve(__dirname, '..', './src/services'),
 			'@utils': path.resolve(__dirname, '..', './src/utils'),
+			'@shared': path.resolve(__dirname, '..', './src/shared'),
+			'@assets': path.resolve(__dirname, '..', './src/assets'),
 		}
 	},
 	plugins: [
