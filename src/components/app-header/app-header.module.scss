@@ -1,0 +1,30 @@
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: auto;
+  padding: 0;
+}
+
+.list {
+	width: 100%;
+}
+
+.logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-inline-start: 0;
+}
+
+.user {
+  margin-left: auto !important;
+}

@@ -1,36 +1,85 @@
-import { clsx } from 'clsx';
-import { useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import s from './app.module.scss';
-import reactLogo from './assets/react.svg';
-import { ReactComponent as TypescriptLogo } from './assets/typescript.svg';
-import { add } from '@utils/one';
-import { AppHeader } from '@components/app-header/app-header';
+import AppHeader from '@components/app-header/app-header';
+import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
+import BurgerIngredients from '@components/burger-ingredients/burger-ingredients';
+import BurgerConstructor from '@components/burger-constructor/burger-constructor';
 
-export const App = () => {
-	// const num = 0
-	const [count, setCount] = useState(0);
+const INGREDIENT_URL = 'https://norma.nomoreparties.space/api/ingredients';
+
+export const App: FC = () => {
+	const [selectedIngredients, setSelectedIngredients] = useState<
+		IngredientInfo[]
+	>([]);
+
+	const [ingredients, setIngredients] = useState<IngredientInfo[]>([]);
+
+	useEffect(() => {
+		// Почему-то вызывается 2 раза - не понял почему
+		const getIngredients = async () => {
+			try {
+				const res = await fetch(INGREDIENT_URL);
+				if (!res.ok) {
+					throw Error(`Код ошибки - ${res.status}`);
+				}
+				const data = await res.json();
+				if (data.success) {
+					setIngredients(data.data);
+				}
+			} catch (error) {
+				console.error('Ошибка получения данных', error);
+			}
+		};
+
+		getIngredients();
+	}, []);
+
+	const addIngredient = useCallback(
+		(ingredient: IngredientInfo) => {
+			if (
+				ingredient.type === 'bun' &&
+				selectedIngredients.find((i) => i.type === 'bun')
+			) {
+				return;
+			}
+			setSelectedIngredients([...selectedIngredients, ingredient]);
+		},
+		[selectedIngredients]
+	);
+
+	const removeIngredient = useCallback(
+		(id: string) => () => {
+			if (!selectedIngredients.find((i) => i._id === id)) {
+				return;
+			}
+			let isFound = false;
+			setSelectedIngredients([
+				...selectedIngredients.filter((i) => {
+					if (i._id === id && !isFound) {
+						isFound = true;
+						return false;
+					}
+					return true;
+				}),
+			]);
+		},
+		[selectedIngredients]
+	);
 
 	return (
-		<div className='page'>
+		<div className={s.app}>
 			<AppHeader />
-			<div className='logo-wrapper'>
-				<a href='https://reactjs.org' target='_blank' rel='noreferrer'>
-					<img
-						src={reactLogo}
-						className={clsx(s.logo, s.react)}
-						alt={`React logo ${add(2, 5)}`}
-					/>
-				</a>
-				<a href='https://vitejs.dev' target='_blank' rel='noreferrer'>
-					<TypescriptLogo className={s.logo} />
-				</a>
-			</div>
-			<h1>React + TS</h1>
-			<div className={s.card}>
-				<button onClick={() => setCount((count) => count + 1)}>
-					count is {count}
-				</button>
-			</div>
+			<main className={s.main}>
+				<BurgerIngredients
+					ingredientList={ingredients}
+					selectedIngredients={selectedIngredients}
+					onIngredientSelected={addIngredient}
+				/>
+				<BurgerConstructor
+					burgerIngredients={selectedIngredients}
+					onIngredientDeleted={removeIngredient}
+				/>
+			</main>
 		</div>
 	);
 };
