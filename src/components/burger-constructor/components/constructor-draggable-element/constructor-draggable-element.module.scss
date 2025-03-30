@@ -1,0 +1,11 @@
+.listItem {
+	position: relative;
+}
+
+.dragIcon {
+	position: absolute;
+	top: 50%;
+	left: -25px;
+	transform: translateY(-50%);
+	cursor: ns-resize;
+}

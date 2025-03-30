@@ -1,16 +1,9 @@
-import React, { FC, useEffect, useMemo, useRef } from 'react';
-import s from './burger-ingredients.module.scss';
-import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import IngredientSection from './components/ingredient-section/ingredient-section';
-import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
+import React, { FC, useEffect, useRef } from 'react';
 import { clsx } from 'clsx';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import useOnScreen from '@utils/hooks/on-screen';
-
-interface IngredientsProps {
-	ingredientList: IngredientInfo[];
-	selectedIngredients: IngredientInfo[];
-	onIngredientSelected: (ingredient: IngredientInfo) => void;
-}
+import IngredientSection from './components/ingredient-section/ingredient-section';
+import s from './burger-ingredients.module.scss';
 
 enum TabName {
 	buns = 'buns',
@@ -18,11 +11,9 @@ enum TabName {
 	fillings = 'fillings',
 }
 
-const BurgerIngredients: FC<IngredientsProps> = ({
-	ingredientList,
-	onIngredientSelected,
-	selectedIngredients,
-}) => {
+const BurgerIngredients: FC = () => {
+	// Стоит ли выносить логику в состояния? Кажется, что логика только для этого
+	// компонента и можно оставить здесь
 	const [currentTab, setCurrentTab] = React.useState<TabName | string>(
 		TabName.buns
 	);
@@ -43,21 +34,6 @@ const BurgerIngredients: FC<IngredientsProps> = ({
 				break;
 		}
 	}, [currentClickedTab]);
-
-	const buns = useMemo(
-		() => ingredientList.filter((i) => i.type === 'bun'),
-		[ingredientList]
-	);
-
-	const sauces = useMemo(
-		() => ingredientList.filter((i) => i.type === 'sauce'),
-		[ingredientList]
-	);
-
-	const main = useMemo(
-		() => ingredientList.filter((i) => i.type === 'main'),
-		[ingredientList]
-	);
 
 	const bunsRef = useRef<HTMLElement>(null);
 	const saucesRef = useRef<HTMLElement>(null);
@@ -109,27 +85,9 @@ const BurgerIngredients: FC<IngredientsProps> = ({
 			</div>
 
 			<div className={s.sections}>
-				<IngredientSection
-					ref={bunsRef}
-					ingredients={buns}
-					selectedIngredients={selectedIngredients}
-					onIngredientSelected={onIngredientSelected}
-					title='Булки'
-				/>
-				<IngredientSection
-					ref={saucesRef}
-					ingredients={sauces}
-					selectedIngredients={selectedIngredients}
-					onIngredientSelected={onIngredientSelected}
-					title='Соусы'
-				/>
-				<IngredientSection
-					ref={fillingsRef}
-					ingredients={main}
-					selectedIngredients={selectedIngredients}
-					onIngredientSelected={onIngredientSelected}
-					title='Начинки'
-				/>
+				<IngredientSection ref={bunsRef} type='bun' title='Булки' />
+				<IngredientSection ref={saucesRef} type='sauce' title='Соусы' />
+				<IngredientSection ref={fillingsRef} type='main' title='Начинки' />
 			</div>
 		</div>
 	);

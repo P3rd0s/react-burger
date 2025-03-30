@@ -1,31 +1,32 @@
 import React, { forwardRef, useMemo } from 'react';
-import s from './ingredient-section.module.scss';
-import IngredientCard from './components/ingredient-card/ingredient-card';
-import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
+import { shallowEqual, useSelector } from 'react-redux';
 import { clsx } from 'clsx';
+import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
+import { RootState } from '@services/index';
+import IngredientCard from './components/ingredient-card/ingredient-card';
+import s from './ingredient-section.module.scss';
 
 interface IngredientSectionProps {
-	ingredients: IngredientInfo[];
-	selectedIngredients: IngredientInfo[];
+	type: 'bun' | 'sauce' | 'main';
 	title: string;
-	onIngredientSelected: (ingredient: IngredientInfo) => void;
 }
 
 const IngredientSection = forwardRef<HTMLElement, IngredientSectionProps>(
-	({ ingredients, title, onIngredientSelected, selectedIngredients }, ref) => {
+	({ title, type }, ref) => {
+		const ingredients = useSelector<RootState, IngredientInfo[]>(
+			(state) =>
+				state.ingredients.ingredientList.filter(
+					(i: IngredientInfo) => i.type === type
+				),
+			shallowEqual
+		);
+
 		const ingredientCards = useMemo(
 			() =>
 				ingredients.map((ingredient) => (
-					<IngredientCard
-						key={ingredient._id}
-						ingredientInfo={ingredient}
-						onIngredientSelected={onIngredientSelected}
-						count={
-							selectedIngredients.filter((i) => i._id === ingredient._id).length
-						}
-					/>
+					<IngredientCard key={ingredient._id} ingredientInfo={ingredient} />
 				)),
-			[ingredients, onIngredientSelected, selectedIngredients]
+			[ingredients]
 		);
 
 		return (

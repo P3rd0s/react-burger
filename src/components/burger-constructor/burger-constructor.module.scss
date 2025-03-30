@@ -8,9 +8,17 @@
 .list {
   max-height: 35vh;
   padding-inline-start: 0;
+  padding-left: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   overflow: scroll;
   list-style: none;
   margin: 0;
+}
+
+.bun {
+	width: calc(100% - 32px);
 }
 
 .price {

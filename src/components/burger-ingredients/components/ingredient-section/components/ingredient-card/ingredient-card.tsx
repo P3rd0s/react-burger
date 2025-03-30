@@ -1,36 +1,42 @@
-import React, { FC, useCallback, useState } from 'react';
-import s from './ingredient-card.module.scss';
+import React, { FC, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useDrag } from 'react-dnd';
 import {
 	Counter,
 	CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import { clsx } from 'clsx';
-import IngredientDetails from './components/ingredient-details/ingredient-details';
+import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import Modal from '@shared/components/modal/modal';
+import { closeModal, openModal } from '@services/ingredients';
+import { RootState } from '@services/index';
+import IngredientDetails from './components/ingredient-details/ingredient-details';
+import s from './ingredient-card.module.scss';
 
 type IngredientCardProps = {
-	count?: number;
 	key: string;
-	onIngredientSelected: (ingredient: IngredientInfo) => void;
 	ingredientInfo: IngredientInfo;
 };
 
-const IngredientCard: FC<IngredientCardProps> = ({
-	count,
-	onIngredientSelected,
-	ingredientInfo,
-}) => {
-	const [isModalOpened, setIsModalOpened] = useState(false);
+const IngredientCard: FC<IngredientCardProps> = ({ ingredientInfo }) => {
+	const dispatch = useDispatch();
+
+	const isModalOpened = useSelector<RootState, boolean>(
+		(state) => state.ingredients.ingredientModalInfo?._id === ingredientInfo._id
+	);
 
 	const handleCloseInfo = useCallback(() => {
-		setIsModalOpened(false);
-	}, [setIsModalOpened]);
+		dispatch(closeModal());
+	}, [dispatch]);
 
 	const handleCardClick = useCallback(() => {
-		onIngredientSelected(ingredientInfo);
-		setIsModalOpened(true);
-	}, [onIngredientSelected, ingredientInfo]);
+		dispatch(openModal(ingredientInfo));
+	}, [dispatch, ingredientInfo]);
+
+	const [, drag] = useDrag({
+		type: 'ingredient',
+		item: ingredientInfo,
+	});
 
 	const ingredientInfoModal = (
 		<Modal
@@ -44,9 +50,17 @@ const IngredientCard: FC<IngredientCardProps> = ({
 	return (
 		<>
 			{isModalOpened && ingredientInfoModal}
-			<div role='contentinfo' className={s.card} onClick={handleCardClick}>
-				{!!count && (
-					<Counter count={count} size='default' extraClass={s.count} />
+			<div
+				role='contentinfo'
+				className={s.card}
+				onClick={handleCardClick}
+				ref={drag}>
+				{!!ingredientInfo.count && (
+					<Counter
+						count={ingredientInfo.count}
+						size='default'
+						extraClass={s.count}
+					/>
 				)}
 				<div className={clsx(s.info, 'pl-4 pr-4 mb-4')}>
 					<img src={ingredientInfo.image} alt='ingredient' />
