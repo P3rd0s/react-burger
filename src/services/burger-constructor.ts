@@ -1,5 +1,11 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+	createAsyncThunk,
+	createSlice,
+	nanoid,
+	PayloadAction,
+} from '@reduxjs/toolkit';
 import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
+import { request } from '@utils/request';
 
 export interface BurgerConstructorState {
 	ingredients: IngredientInfo[];
@@ -19,28 +25,14 @@ const initialState: BurgerConstructorState = {
 	orderModal: null,
 };
 
-const ORDER_URL = 'https://norma.nomoreparties.space/api/orders';
-
 export const fetchOrder = createAsyncThunk(
 	'burgerConstructor/fetchOrder',
-	async (ingredients: string[]): Promise<OrderResponse | undefined | null> => {
-		try {
-			const res = await fetch(ORDER_URL, {
-				method: 'POST',
-				body: JSON.stringify({ ingredients }),
-			});
-			if (!res.ok) {
-				throw Error(`Код ошибки - ${res.status}`);
-			}
-			const data = await res.json();
-			if (data.success) {
-				return data.data;
-			}
-		} catch (error) {
-			console.error('Ошибка получения данных', error);
-			return null;
-		}
-	}
+	async (ingredients: string[]): Promise<OrderResponse | undefined | null> =>
+		await request('orders', {
+			method: 'POST',
+			headers: new Headers({ 'Content-Type': 'application/json' }),
+			body: JSON.stringify({ ingredients }),
+		})
 );
 
 const burgerConstructorSlice = createSlice({
@@ -51,18 +43,21 @@ const burgerConstructorSlice = createSlice({
 			state.orderModal = null;
 		},
 
-		addIngredient: (state, action: PayloadAction<IngredientInfo>) => {
-			if (action.payload.type === 'bun') {
-				const prevPrice = state.ingredients.find(
-					(i) => i.type === 'bun'
-				)?.price;
-				state.ingredients.shift();
-				state.ingredients.unshift(action.payload);
-				state.totalPrice += action.payload.price - (prevPrice || 0);
-			} else {
-				state.ingredients.push(action.payload);
-				state.totalPrice += action.payload.price;
-			}
+		addIngredient: {
+			reducer: (state, action: PayloadAction<IngredientInfo>) => {
+				if (action.payload.type === 'bun') {
+					const prevPrice = state.ingredients.find(
+						(i) => i.type === 'bun'
+					)?.price;
+					state.ingredients.shift();
+					state.ingredients.unshift(action.payload);
+					state.totalPrice += action.payload.price - (prevPrice || 0);
+				} else {
+					state.ingredients.push(action.payload);
+					state.totalPrice += action.payload.price;
+				}
+			},
+			prepare: (ingredient) => ({ payload: { ...ingredient, uuid: nanoid() } }),
 		},
 
 		removeIngredient: (
@@ -86,6 +81,11 @@ const burgerConstructorSlice = createSlice({
 			state.ingredients.splice(oldIndex, 1);
 			state.ingredients.splice(newIndex, 0, ingredient);
 		},
+
+		resetConstructor: (state) => {
+			state.ingredients = [];
+			state.totalPrice = 0;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchOrder.fulfilled, (state, action) => {
@@ -102,5 +102,6 @@ export const {
 	addIngredient,
 	removeIngredient,
 	rearrangeIngredient,
+	resetConstructor,
 } = burgerConstructorSlice.actions;
 export default burgerConstructorSlice.reducer;

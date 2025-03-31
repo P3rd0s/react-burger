@@ -1,5 +1,4 @@
 import React, { FC, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';
 import {
 	Counter,
@@ -12,6 +11,7 @@ import { closeModal, openModal } from '@services/ingredients';
 import { RootState } from '@services/index';
 import IngredientDetails from './components/ingredient-details/ingredient-details';
 import s from './ingredient-card.module.scss';
+import {useAppDispatch, useAppSelector} from "@services/hooks";
 
 type IngredientCardProps = {
 	key: string;
@@ -19,9 +19,9 @@ type IngredientCardProps = {
 };
 
 const IngredientCard: FC<IngredientCardProps> = ({ ingredientInfo }) => {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
-	const isModalOpened = useSelector<RootState, boolean>(
+	const isModalOpened = useAppSelector(
 		(state) => state.ingredients.ingredientModalInfo?._id === ingredientInfo._id
 	);
 

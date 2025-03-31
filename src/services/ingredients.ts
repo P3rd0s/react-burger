@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
+import { request } from '@utils/request';
 
 export interface IngredientsState {
 	ingredientList: IngredientInfo[];
@@ -11,24 +12,11 @@ const initialState: IngredientsState = {
 	ingredientModalInfo: null,
 };
 
-const INGREDIENT_URL = 'https://norma.nomoreparties.space/api/ingredients';
-
 export const fetchIngredients = createAsyncThunk(
 	'ingredients/fetchIngredients',
 	async (): Promise<IngredientInfo[] | undefined> => {
-		try {
-			const res = await fetch(INGREDIENT_URL);
-			if (!res.ok) {
-				throw Error(`Код ошибки - ${res.status}`);
-			}
-			const data = await res.json();
-			if (data.success) {
-				return data.data;
-			}
-		} catch (error) {
-			console.error('Ошибка получения данных', error);
-			return [];
-		}
+		const response = await request('ingredients');
+		return response.data;
 	}
 );
 
@@ -70,6 +58,13 @@ export const ingredientsSlice = createSlice({
 			}
 			ingredient.count = ingredient.count === 1 ? 0 : ingredient.count - 1;
 		},
+
+		resetCounter: (state) => {
+			state.ingredientList = state.ingredientList.map((i) => ({
+				...i,
+				count: 0,
+			}));
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchIngredients.fulfilled, (state, action) => {
@@ -86,5 +81,6 @@ export const {
 	closeModal,
 	addIngredientCount,
 	removeIngredientCount,
+	resetCounter,
 } = ingredientsSlice.actions;
 export default ingredientsSlice.reducer;

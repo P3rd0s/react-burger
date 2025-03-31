@@ -1,5 +1,4 @@
 import React, { FC, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useDrop } from 'react-dnd';
 import {
 	Button,
@@ -10,27 +9,18 @@ import { clsx } from 'clsx';
 import ConstructorDraggableElement from '@components/burger-constructor/components/constructor-draggable-element/constructor-draggable-element';
 import OrderDetails from '@components/burger-constructor/components/order-details/order-details';
 import Modal from '@shared/components/modal/modal';
-import { RootState } from '@services/index';
 import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import {
 	addIngredient,
 	closeModal,
 	fetchOrder,
-	OrderResponse,
 } from '@services/burger-constructor';
 import { addIngredientCount } from '@services/ingredients';
 import s from './burger-constructor.module.scss';
+import { useAppDispatch, useAppSelector } from '@services/hooks';
 
 const BurgerConstructor: FC = () => {
-	const { bun, ingredients, totalPrice, orderModal } = useSelector<
-		RootState,
-		{
-			bun?: IngredientInfo;
-			ingredients: IngredientInfo[];
-			totalPrice: number;
-			orderModal: OrderResponse | null;
-		}
-	>(
+	const { bun, ingredients, totalPrice, orderModal } = useAppSelector(
 		(state) => ({
 			bun: state.burgerConstructor.ingredients.find(
 				(i: IngredientInfo) => i.type === 'bun'
@@ -44,7 +34,7 @@ const BurgerConstructor: FC = () => {
 		(a, b) => JSON.stringify(a) === JSON.stringify(b)
 	);
 
-	const dispatch = useDispatch<any>();
+	const dispatch = useAppDispatch();
 
 	const handleShowOrder = useCallback(() => {
 		if (!bun) {
@@ -59,7 +49,7 @@ const BurgerConstructor: FC = () => {
 
 	const orderModalComponent = (
 		<Modal onClose={handleCloseOrder} className={s.modal}>
-			<OrderDetails />
+			<OrderDetails orderNumber={orderModal?.order?.number || 0} />
 		</Modal>
 	);
 
@@ -98,7 +88,7 @@ const BurgerConstructor: FC = () => {
 					{ingredients.map((ingredient, index) => (
 						<ConstructorDraggableElement
 							index={index}
-							key={index}
+							key={ingredient.uuid || index}
 							ingredient={ingredient}
 						/>
 					))}
@@ -121,6 +111,7 @@ const BurgerConstructor: FC = () => {
 						htmlType='button'
 						type='primary'
 						size='medium'
+						disabled={!totalPrice}
 						onClick={handleShowOrder}>
 						Оформить заказ
 					</Button>

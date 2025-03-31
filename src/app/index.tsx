@@ -1,5 +1,4 @@
 import { FC, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 
@@ -8,9 +7,10 @@ import BurgerIngredients from '@components/burger-ingredients/burger-ingredients
 import BurgerConstructor from '@components/burger-constructor/burger-constructor';
 import { fetchIngredients } from '@services/ingredients';
 import s from './app.module.scss';
+import { useAppDispatch } from '@services/hooks';
 
 export const App: FC = () => {
-	const dispatch = useDispatch<any>();
+	const dispatch = useAppDispatch();
 	useEffect(() => {
 		dispatch(fetchIngredients());
 	}, [dispatch]);

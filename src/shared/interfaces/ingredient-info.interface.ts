@@ -11,4 +11,5 @@ export interface IngredientInfo {
 	image_mobile: string;
 	image_large: string;
 	count?: number;
+	uuid?: string;
 }

@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { useDispatch } from 'react-redux';
 import {
 	ConstructorElement,
 	DragIcon,
@@ -11,14 +10,15 @@ import {
 	removeIngredient,
 } from '@services/burger-constructor';
 import { removeIngredientCount } from '@services/ingredients';
-import s from './constructor-draggable-element.module.scss'
+import s from './constructor-draggable-element.module.scss';
+import { useAppDispatch } from '@services/hooks';
 
 const ConstructorDraggableElement: FC<{
 	ingredient: IngredientInfo;
-	key: number;
+	key: number | string;
 	index: number;
 }> = ({ index, ingredient }) => {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const ref = useRef<HTMLLIElement>(null);
 

@@ -1,10 +1,11 @@
 import React, { forwardRef, useMemo } from 'react';
-import { shallowEqual, useSelector } from 'react-redux';
+import { shallowEqual } from 'react-redux';
 import { clsx } from 'clsx';
 import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import { RootState } from '@services/index';
 import IngredientCard from './components/ingredient-card/ingredient-card';
 import s from './ingredient-section.module.scss';
+import {useAppSelector} from "@services/hooks";
 
 interface IngredientSectionProps {
 	type: 'bun' | 'sauce' | 'main';
@@ -13,7 +14,7 @@ interface IngredientSectionProps {
 
 const IngredientSection = forwardRef<HTMLElement, IngredientSectionProps>(
 	({ title, type }, ref) => {
-		const ingredients = useSelector<RootState, IngredientInfo[]>(
+		const ingredients = useAppSelector<RootState, IngredientInfo[]>(
 			(state) =>
 				state.ingredients.ingredientList.filter(
 					(i: IngredientInfo) => i.type === type
