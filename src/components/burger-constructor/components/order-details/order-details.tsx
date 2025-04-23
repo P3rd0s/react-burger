@@ -3,11 +3,11 @@ import s from './order-details.module.scss';
 import checkIcon from '@assets/images/order-check.svg';
 import { clsx } from 'clsx';
 
-const OrderDetails: FC = () => {
+const OrderDetails: FC<{ orderNumber: number }> = ({ orderNumber }) => {
 	return (
 		<>
 			<h1 className={clsx('text text_type_digits-large mt-30 mb-8', s.order)}>
-				242352
+				{orderNumber}
 			</h1>
 			<h4 className='text text_type_main-medium mb-15'>идентификатор заказа</h4>
 

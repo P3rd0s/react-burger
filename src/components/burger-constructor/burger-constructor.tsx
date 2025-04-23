@@ -1,107 +1,117 @@
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import React, { FC, useCallback } from 'react';
+import { useDrop } from 'react-dnd';
 import {
 	Button,
 	ConstructorElement,
 	CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import s from './burger-constructor.module.scss';
-import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import { clsx } from 'clsx';
+import ConstructorDraggableElement from '@components/burger-constructor/components/constructor-draggable-element/constructor-draggable-element';
 import OrderDetails from '@components/burger-constructor/components/order-details/order-details';
 import Modal from '@shared/components/modal/modal';
+import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
+import {
+	addIngredient,
+	closeModal,
+	fetchOrder,
+} from '@services/burger-constructor';
+import { addIngredientCount } from '@services/ingredients';
+import s from './burger-constructor.module.scss';
+import { useAppDispatch, useAppSelector } from '@services/hooks';
 
-interface BurgerConstructorProps {
-	burgerIngredients: IngredientInfo[];
-	onIngredientDeleted: (id: string) => () => void;
-}
-
-const BurgerConstructor: FC<BurgerConstructorProps> = ({
-	burgerIngredients,
-	onIngredientDeleted,
-}) => {
-	const bun = useMemo(
-		() => burgerIngredients.find((i) => i.type === 'bun'),
-		[burgerIngredients]
+const BurgerConstructor: FC = () => {
+	const { bun, ingredients, totalPrice, orderModal } = useAppSelector(
+		(state) => ({
+			bun: state.burgerConstructor.ingredients.find(
+				(i: IngredientInfo) => i.type === 'bun'
+			),
+			ingredients: state.burgerConstructor.ingredients.filter(
+				(i: IngredientInfo) => i.type !== 'bun'
+			),
+			totalPrice: state.burgerConstructor.totalPrice,
+			orderModal: state.burgerConstructor.orderModal,
+		}),
+		(a, b) => JSON.stringify(a) === JSON.stringify(b)
 	);
-	const ingredients = useMemo(
-		() => burgerIngredients.filter((i) => i.type !== 'bun'),
-		[burgerIngredients]
-	);
 
-	const price = useMemo(
-		() =>
-			(bun?.price || 0) +
-			ingredients.reduce((total, cur) => total + cur.price, 0),
-		[bun?.price, ingredients]
-	);
-
-	const [isOrderShown, setIsOrderShown] = useState(false);
+	const dispatch = useAppDispatch();
 
 	const handleShowOrder = useCallback(() => {
-		setIsOrderShown(true);
-	}, [setIsOrderShown]);
+		if (!bun) {
+			return;
+		}
+		dispatch(fetchOrder([bun._id, ...ingredients.map((i) => i._id)]));
+	}, [bun, dispatch, ingredients]);
 
 	const handleCloseOrder = useCallback(() => {
-		setIsOrderShown(false);
-	}, [setIsOrderShown]);
+		dispatch(closeModal());
+	}, [dispatch]);
 
-	const orderModal = (
+	const orderModalComponent = (
 		<Modal onClose={handleCloseOrder} className={s.modal}>
-			<OrderDetails />
+			<OrderDetails orderNumber={orderModal?.order?.number || 0} />
 		</Modal>
 	);
 
+	const dropHandler = useCallback(
+		(data: IngredientInfo | { index: number }) => {
+			if ('index' in data) {
+				return;
+			}
+			dispatch(addIngredientCount(data));
+			dispatch(addIngredient(data));
+		},
+		[dispatch]
+	);
+
+	const [, dropTarget] = useDrop({
+		accept: 'ingredient',
+		drop: dropHandler,
+	});
+
 	return (
 		<>
-			{isOrderShown && orderModal}
-			<div className={s.wrapper}>
+			{orderModal && orderModalComponent}
+			<div className={s.wrapper} ref={dropTarget}>
 				{bun && (
 					<ConstructorElement
-						extraClass='mb-4'
+						extraClass={clsx('mb-4 ml-8', s.bun)}
 						type='top'
 						isLocked={true}
 						text={`${bun.name} (верх)`}
 						price={bun.price}
 						thumbnail={bun.image}
-						handleClose={onIngredientDeleted(bun._id)}
-						// onClick={handleShowInfo(bun)}
 					/>
 				)}
 
 				<ul className={s.list}>
 					{ingredients.map((ingredient, index) => (
-						<li key={index}>
-							<ConstructorElement
-								extraClass='mb-4'
-								key={ingredient._id + index}
-								text={ingredient.name}
-								price={ingredient.price}
-								thumbnail={ingredient.image}
-								handleClose={onIngredientDeleted(ingredient._id)}
-								// onClick={handleShowInfo(ingredient)}
-							/>
-						</li>
+						<ConstructorDraggableElement
+							index={index}
+							key={ingredient.uuid || index}
+							ingredient={ingredient}
+						/>
 					))}
 				</ul>
 
 				{bun && (
 					<ConstructorElement
+						extraClass={clsx('mt-4 ml-8', s.bun)}
 						type='bottom'
 						isLocked={true}
 						text={`${bun.name} (низ)`}
 						price={bun.price}
 						thumbnail={bun.image}
-						handleClose={onIngredientDeleted(bun._id)}
-						// onClick={handleShowInfo(bun)}
 					/>
 				)}
 				<div className={clsx('text text_type_digits-medium mt-10', s.price)}>
-					{price}
+					{totalPrice}
 					<CurrencyIcon className={clsx(s.icon, 'mr-10 ml-2')} type='primary' />
 					<Button
 						htmlType='button'
 						type='primary'
 						size='medium'
+						disabled={!totalPrice}
 						onClick={handleShowOrder}>
 						Оформить заказ
 					</Button>
