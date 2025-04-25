@@ -1,14 +1,14 @@
-import { FC, useCallback, useState } from 'react';
-import { clsx } from 'clsx';
+import { login } from '@services/auth/requests/auth.requests';
+import { useAppDispatch } from '@services/hooks';
+import s from '@shared/styles/auth.module.scss';
 import {
 	Button,
 	EmailInput,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import s from '@shared/styles/auth.module.scss';
+import { clsx } from 'clsx';
+import { FC, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '@services/hooks';
-import { login } from '@services/auth/requests/auth.requests';
 
 const Login: FC = () => {
 	const [email, setEmail] = useState('');

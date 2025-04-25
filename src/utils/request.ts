@@ -1,7 +1,7 @@
-import { REFRESH_TOKEN } from '@shared/const/storage-keys.const';
-import { saveTokens } from '@utils/token-saver';
 import { getCookie } from '@services/auth/utils/cookie-handler';
 import { ACCESS_TOKEN } from '@shared/const/cookie-keys';
+import { REFRESH_TOKEN } from '@shared/const/storage-keys.const';
+import { saveTokens } from '@utils/token-saver';
 
 const BASE_API_URL = 'https://norma.nomoreparties.space/api/';
 

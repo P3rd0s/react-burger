@@ -1,4 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { ACCESS_TOKEN } from '@shared/const/cookie-keys';
+import { REFRESH_TOKEN } from '@shared/const/storage-keys.const';
+import { request } from '@utils/request';
+
 import {
 	LoginRequest,
 	LoginResponse,
@@ -6,10 +10,7 @@ import {
 	ResetPasswordRequest,
 	UserResponse,
 } from '../interfaces/auth.interface';
-import { request } from '@utils/request';
-import { REFRESH_TOKEN } from '@shared/const/storage-keys.const';
 import { getCookie } from '../utils/cookie-handler';
-import { ACCESS_TOKEN } from '@shared/const/cookie-keys';
 
 export const login = createAsyncThunk(
 	'auth/login',

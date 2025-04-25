@@ -1,9 +1,10 @@
-import { FC, useCallback } from 'react';
-import { clsx } from 'clsx';
-import s from './profile.module.scss';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '@services/hooks';
 import { logout } from '@services/auth/requests/auth.requests';
+import { useAppDispatch } from '@services/hooks';
+import { clsx } from 'clsx';
+import { FC, useCallback } from 'react';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+
+import s from './profile.module.scss';
 
 const Profile: FC = () => {
 	const navigate = useNavigate();

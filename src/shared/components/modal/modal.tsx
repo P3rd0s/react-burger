@@ -1,10 +1,11 @@
-import React, { FC, useCallback, useEffect, useMemo } from 'react';
-import s from './modal.module.scss';
-import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from '@shared/components/modal-overlay/modal-overlay';
+import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { clsx } from 'clsx';
+import React, { FC, useCallback, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
+
+import s from './modal.module.scss';
 
 const EVENT_NAME = 'keydown';
 

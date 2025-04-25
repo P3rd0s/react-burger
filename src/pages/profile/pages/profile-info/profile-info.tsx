@@ -1,14 +1,14 @@
-import { FC, useCallback, useState } from 'react';
+import { patchUser } from '@services/auth/requests/auth.requests';
+import { useAppDispatch, useAppSelector } from '@services/hooks';
+import { RootState } from '@services/index';
 import {
 	Button,
 	EmailInput,
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useAppDispatch, useAppSelector } from '@services/hooks';
-import { RootState } from '@services/index';
+import { FC, useCallback, useState } from 'react';
 import { shallowEqual } from 'react-redux';
-import { patchUser } from '@services/auth/requests/auth.requests';
 
 const ProfileInfo: FC = () => {
 	const { initName, initEmail } = useAppSelector<

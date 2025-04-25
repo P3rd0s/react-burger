@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { resetTokens, saveTokens } from '@utils/token-saver';
+
 import { UserState } from './interfaces/auth.interface';
 import {
 	fetchUser,
@@ -11,7 +13,6 @@ import {
 	sendCodeToEmail,
 } from './requests/auth.requests';
 import { loginReducer, userInfoReducer } from './utils/auth-reducers';
-import { resetTokens, saveTokens } from '@utils/token-saver';
 
 const initialState: UserState = {
 	email: '',

@@ -1,23 +1,23 @@
-import React, { FC, useEffect } from 'react';
-
 import AppHeader from '@components/app-header/app-header';
-import { fetchIngredients } from '@services/ingredients';
-import s from './app.module.scss';
-import { useAppDispatch } from '@services/hooks';
-import { Route, Routes, useLocation } from 'react-router-dom';
-import Main from '@pages/main/main';
+import IngredientDetails from '@components/burger-ingredients/components/ingredient-section/components/ingredient-card/components/ingredient-details/ingredient-details';
+import ForgotPassword from '@pages/forgot-password/forgot-password';
+import Ingredient from '@pages/ingredient/ingredient';
 import Login from '@pages/login/login';
+import Main from '@pages/main/main';
+import ProfileInfo from '@pages/profile/pages/profile-info/profile-info';
+import Profile from '@pages/profile/profile';
 import Registration from '@pages/registration/registration';
 import ResetPassword from '@pages/reset-password/reset-password';
-import ForgotPassword from '@pages/forgot-password/forgot-password';
-import Profile from '@pages/profile/profile';
-import ProfileInfo from '@pages/profile/pages/profile-info/profile-info';
-import Ingredient from '@pages/ingredient/ingredient';
 import { fetchUser } from '@services/auth/requests/auth.requests';
+import { useAppDispatch } from '@services/hooks';
+import { fetchIngredients } from '@services/ingredients';
+import Modal from '@shared/components/modal/modal';
 import ProtectedRoute from '@utils/components/protected-route';
 import { clsx } from 'clsx';
-import IngredientDetails from '@components/burger-ingredients/components/ingredient-section/components/ingredient-card/components/ingredient-details/ingredient-details';
-import Modal from '@shared/components/modal/modal';
+import React, { FC, useEffect } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
+
+import s from './app.module.scss';
 
 export const App: FC = () => {
 	const location = useLocation();

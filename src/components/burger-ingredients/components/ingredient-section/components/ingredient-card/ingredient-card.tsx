@@ -1,13 +1,14 @@
-import React, { FC, useCallback } from 'react';
-import { useDrag } from 'react-dnd';
+import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import {
 	Counter,
 	CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { clsx } from 'clsx';
-import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
-import s from './ingredient-card.module.scss';
+import React, { FC } from 'react';
+import { useDrag } from 'react-dnd';
 import { Link, useLocation } from 'react-router-dom';
+
+import s from './ingredient-card.module.scss';
 
 type IngredientCardProps = {
 	key: string;

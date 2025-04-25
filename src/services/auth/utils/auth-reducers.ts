@@ -1,10 +1,11 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { saveTokens } from '@utils/token-saver';
+
 import {
 	LoginResponse,
 	UserResponse,
 	UserState,
 } from '../interfaces/auth.interface';
-import { saveTokens } from '@utils/token-saver';
 
 export const loginReducer = (
 	state: UserState,

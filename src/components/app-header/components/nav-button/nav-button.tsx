@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
-import s from './nav-button.module.scss';
 import { clsx } from 'clsx';
+import React, { FC } from 'react';
 import { NavLink } from 'react-router-dom';
+
+import s from './nav-button.module.scss';
 
 interface NavButtonProps {
 	isHighlighted?: boolean;

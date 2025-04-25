@@ -1,14 +1,14 @@
-import { FC, useCallback, useState } from 'react';
-import { clsx } from 'clsx';
+import { resetPassword } from '@services/auth/requests/auth.requests';
+import { useAppDispatch } from '@services/hooks';
+import s from '@shared/styles/auth.module.scss';
 import {
 	Button,
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import s from '@shared/styles/auth.module.scss';
+import { clsx } from 'clsx';
+import { FC, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '@services/hooks';
-import { resetPassword } from '@services/auth/requests/auth.requests';
 
 const ResetPassword: FC = () => {
 	const [password, setPassword] = useState('');

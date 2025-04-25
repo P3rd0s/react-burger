@@ -1,24 +1,25 @@
-import React, { FC, useCallback } from 'react';
-import { useDrop } from 'react-dnd';
+import ConstructorDraggableElement from '@components/burger-constructor/components/constructor-draggable-element/constructor-draggable-element';
+import OrderDetails from '@components/burger-constructor/components/order-details/order-details';
+import {
+	addIngredient,
+	closeModal,
+	fetchOrder,
+} from '@services/burger-constructor';
+import { useAppDispatch, useAppSelector } from '@services/hooks';
+import { addIngredientCount } from '@services/ingredients';
+import Modal from '@shared/components/modal/modal';
+import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import {
 	Button,
 	ConstructorElement,
 	CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { clsx } from 'clsx';
-import ConstructorDraggableElement from '@components/burger-constructor/components/constructor-draggable-element/constructor-draggable-element';
-import OrderDetails from '@components/burger-constructor/components/order-details/order-details';
-import Modal from '@shared/components/modal/modal';
-import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
-import {
-	addIngredient,
-	closeModal,
-	fetchOrder,
-} from '@services/burger-constructor';
-import { addIngredientCount } from '@services/ingredients';
-import s from './burger-constructor.module.scss';
-import { useAppDispatch, useAppSelector } from '@services/hooks';
+import React, { FC, useCallback } from 'react';
+import { useDrop } from 'react-dnd';
 import { useNavigate } from 'react-router-dom';
+
+import s from './burger-constructor.module.scss';
 
 const BurgerConstructor: FC = () => {
 	const { bun, ingredients, totalPrice, orderModal, isAuthorized } =

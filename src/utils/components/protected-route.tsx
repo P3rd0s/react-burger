@@ -1,8 +1,8 @@
-import { FC, PropsWithChildren } from 'react';
-import { Navigate } from 'react-router-dom';
 import { useAppSelector } from '@services/hooks';
 import { RootState } from '@services/index';
+import { FC, PropsWithChildren } from 'react';
 import { shallowEqual } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 
 interface ProtectedRouteProps {
 	isAuthOnly?: boolean;

@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
-import s from './ingredient-details.module.scss';
-import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
-import { useParams } from 'react-router-dom';
 import { useAppSelector } from '@services/hooks';
 import { RootState } from '@services/index';
+import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
+import React, { FC } from 'react';
 import { shallowEqual } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
+import s from './ingredient-details.module.scss';
 
 const IngredientDetails: FC = () => {
 	const { id } = useParams();

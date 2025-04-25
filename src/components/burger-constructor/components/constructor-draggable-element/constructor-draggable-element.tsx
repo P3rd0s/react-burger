@@ -1,17 +1,18 @@
-import React, { FC, useCallback, useRef } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
-import {
-	ConstructorElement,
-	DragIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import {
 	rearrangeIngredient,
 	removeIngredient,
 } from '@services/burger-constructor';
-import { removeIngredientCount } from '@services/ingredients';
-import s from './constructor-draggable-element.module.scss';
 import { useAppDispatch } from '@services/hooks';
+import { removeIngredientCount } from '@services/ingredients';
+import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
+import {
+	ConstructorElement,
+	DragIcon,
+} from '@ya.praktikum/react-developer-burger-ui-components';
+import React, { FC, useCallback, useRef } from 'react';
+import { useDrag, useDrop } from 'react-dnd';
+
+import s from './constructor-draggable-element.module.scss';
 
 const ConstructorDraggableElement: FC<{
 	ingredient: IngredientInfo;

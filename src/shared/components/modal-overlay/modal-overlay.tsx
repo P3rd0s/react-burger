@@ -1,4 +1,5 @@
 import React, { FC, useCallback, useRef } from 'react';
+
 import s from './modal-overlay.module.scss';
 
 const ModalOverlay: FC<
