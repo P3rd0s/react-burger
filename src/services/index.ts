@@ -1,9 +1,11 @@
 import ingredients from '@services/ingredients';
 import burgerConstructor from '@services/burger-constructor';
 import { configureStore } from '@reduxjs/toolkit';
+import auth from '@services/auth/auth';
 
 export const store = configureStore({
 	reducer: {
+		auth,
 		ingredients,
 		burgerConstructor,
 	},

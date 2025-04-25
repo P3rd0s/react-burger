@@ -24,7 +24,7 @@ const AppHeader = () => {
 						Лента заказов
 					</NavButton>
 
-					<NavButton className={s.user}>
+					<NavButton className={s.user} to='/profile'>
 						<ProfileIcon type='secondary' />
 						Личный кабинет
 					</NavButton>

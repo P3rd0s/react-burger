@@ -5,7 +5,7 @@ import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import { RootState } from '@services/index';
 import IngredientCard from './components/ingredient-card/ingredient-card';
 import s from './ingredient-section.module.scss';
-import {useAppSelector} from "@services/hooks";
+import { useAppSelector } from '@services/hooks';
 
 interface IngredientSectionProps {
 	type: 'bun' | 'sauce' | 'main';

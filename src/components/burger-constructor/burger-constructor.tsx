@@ -18,30 +18,39 @@ import {
 import { addIngredientCount } from '@services/ingredients';
 import s from './burger-constructor.module.scss';
 import { useAppDispatch, useAppSelector } from '@services/hooks';
+import { useNavigate } from 'react-router-dom';
 
 const BurgerConstructor: FC = () => {
-	const { bun, ingredients, totalPrice, orderModal } = useAppSelector(
-		(state) => ({
-			bun: state.burgerConstructor.ingredients.find(
-				(i: IngredientInfo) => i.type === 'bun'
-			),
-			ingredients: state.burgerConstructor.ingredients.filter(
-				(i: IngredientInfo) => i.type !== 'bun'
-			),
-			totalPrice: state.burgerConstructor.totalPrice,
-			orderModal: state.burgerConstructor.orderModal,
-		}),
-		(a, b) => JSON.stringify(a) === JSON.stringify(b)
-	);
+	const { bun, ingredients, totalPrice, orderModal, isAuthorized } =
+		useAppSelector(
+			(state) => ({
+				bun: state.burgerConstructor.ingredients.find(
+					(i: IngredientInfo) => i.type === 'bun'
+				),
+				ingredients: state.burgerConstructor.ingredients.filter(
+					(i: IngredientInfo) => i.type !== 'bun'
+				),
+				totalPrice: state.burgerConstructor.totalPrice,
+				orderModal: state.burgerConstructor.orderModal,
+				isAuthorized: !!state.auth.name,
+			}),
+			(a, b) => JSON.stringify(a) === JSON.stringify(b)
+		);
 
 	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 
 	const handleShowOrder = useCallback(() => {
 		if (!bun) {
 			return;
 		}
+		if (!isAuthorized) {
+			navigate('/login');
+			return;
+		}
+
 		dispatch(fetchOrder([bun._id, ...ingredients.map((i) => i._id)]));
-	}, [bun, dispatch, ingredients]);
+	}, [bun, dispatch, ingredients, isAuthorized, navigate]);
 
 	const handleCloseOrder = useCallback(() => {
 		dispatch(closeModal());
