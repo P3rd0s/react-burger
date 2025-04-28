@@ -1,9 +1,10 @@
-import React, { FC, useEffect, useRef } from 'react';
-import { clsx } from 'clsx';
-import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import useOnScreen from '@utils/hooks/on-screen';
-import IngredientSection from './components/ingredient-section/ingredient-section';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import { clsx } from 'clsx';
+import React, { FC, useEffect, useRef } from 'react';
+
 import s from './burger-ingredients.module.scss';
+import IngredientSection from './components/ingredient-section/ingredient-section';
 
 enum TabName {
 	buns = 'buns',

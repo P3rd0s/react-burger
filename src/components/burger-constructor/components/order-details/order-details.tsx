@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
-import s from './order-details.module.scss';
 import checkIcon from '@assets/images/order-check.svg';
 import { clsx } from 'clsx';
+import React, { FC } from 'react';
+
+import s from './order-details.module.scss';
 
 const OrderDetails: FC<{ orderNumber: number }> = ({ orderNumber }) => {
 	return (

@@ -1,47 +1,64 @@
-import React, { FC, useCallback } from 'react';
-import { useDrop } from 'react-dnd';
+import ConstructorDraggableElement from '@components/burger-constructor/components/constructor-draggable-element/constructor-draggable-element';
+import OrderDetails from '@components/burger-constructor/components/order-details/order-details';
+import {
+	addIngredient,
+	closeModal,
+	fetchOrder,
+	resetConstructor,
+} from '@services/burger-constructor';
+import { useAppDispatch, useAppSelector } from '@services/hooks';
+import { addIngredientCount, resetCounter } from '@services/ingredients';
+import Modal from '@shared/components/modal/modal';
+import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import {
 	Button,
 	ConstructorElement,
 	CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { clsx } from 'clsx';
-import ConstructorDraggableElement from '@components/burger-constructor/components/constructor-draggable-element/constructor-draggable-element';
-import OrderDetails from '@components/burger-constructor/components/order-details/order-details';
-import Modal from '@shared/components/modal/modal';
-import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
-import {
-	addIngredient,
-	closeModal,
-	fetchOrder,
-} from '@services/burger-constructor';
-import { addIngredientCount } from '@services/ingredients';
+import React, { FC, useCallback } from 'react';
+import { useDrop } from 'react-dnd';
+import { useNavigate } from 'react-router-dom';
+
 import s from './burger-constructor.module.scss';
-import { useAppDispatch, useAppSelector } from '@services/hooks';
 
 const BurgerConstructor: FC = () => {
-	const { bun, ingredients, totalPrice, orderModal } = useAppSelector(
-		(state) => ({
-			bun: state.burgerConstructor.ingredients.find(
-				(i: IngredientInfo) => i.type === 'bun'
-			),
-			ingredients: state.burgerConstructor.ingredients.filter(
-				(i: IngredientInfo) => i.type !== 'bun'
-			),
-			totalPrice: state.burgerConstructor.totalPrice,
-			orderModal: state.burgerConstructor.orderModal,
-		}),
-		(a, b) => JSON.stringify(a) === JSON.stringify(b)
-	);
+	const { bun, ingredients, totalPrice, orderModal, isAuthorized } =
+		useAppSelector(
+			(state) => ({
+				bun: state.burgerConstructor.ingredients.find(
+					(i: IngredientInfo) => i.type === 'bun'
+				),
+				ingredients: state.burgerConstructor.ingredients.filter(
+					(i: IngredientInfo) => i.type !== 'bun'
+				),
+				totalPrice: state.burgerConstructor.totalPrice,
+				orderModal: state.burgerConstructor.orderModal,
+				isAuthorized: !!state.auth.name,
+			}),
+			(a, b) => JSON.stringify(a) === JSON.stringify(b)
+		);
 
 	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 
-	const handleShowOrder = useCallback(() => {
+	const handleShowOrder = useCallback(async () => {
 		if (!bun) {
 			return;
 		}
-		dispatch(fetchOrder([bun._id, ...ingredients.map((i) => i._id)]));
-	}, [bun, dispatch, ingredients]);
+		if (!isAuthorized) {
+			navigate('/login');
+			return;
+		}
+
+		const resultAction = await dispatch(
+			fetchOrder([bun._id, ...ingredients.map((i) => i._id)])
+		);
+		if (fetchOrder.fulfilled.match(resultAction)) {
+			dispatch(resetConstructor());
+			dispatch(resetCounter());
+		}
+	}, [bun, dispatch, ingredients, isAuthorized, navigate]);
 
 	const handleCloseOrder = useCallback(() => {
 		dispatch(closeModal());

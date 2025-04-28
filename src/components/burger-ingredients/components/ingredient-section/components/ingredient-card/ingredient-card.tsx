@@ -1,17 +1,14 @@
-import React, { FC, useCallback } from 'react';
-import { useDrag } from 'react-dnd';
+import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import {
 	Counter,
 	CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { clsx } from 'clsx';
-import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
-import Modal from '@shared/components/modal/modal';
-import { closeModal, openModal } from '@services/ingredients';
-import { RootState } from '@services/index';
-import IngredientDetails from './components/ingredient-details/ingredient-details';
+import React, { FC } from 'react';
+import { useDrag } from 'react-dnd';
+import { Link, useLocation } from 'react-router-dom';
+
 import s from './ingredient-card.module.scss';
-import {useAppDispatch, useAppSelector} from "@services/hooks";
 
 type IngredientCardProps = {
 	key: string;
@@ -19,42 +16,19 @@ type IngredientCardProps = {
 };
 
 const IngredientCard: FC<IngredientCardProps> = ({ ingredientInfo }) => {
-	const dispatch = useAppDispatch();
-
-	const isModalOpened = useAppSelector(
-		(state) => state.ingredients.ingredientModalInfo?._id === ingredientInfo._id
-	);
-
-	const handleCloseInfo = useCallback(() => {
-		dispatch(closeModal());
-	}, [dispatch]);
-
-	const handleCardClick = useCallback(() => {
-		dispatch(openModal(ingredientInfo));
-	}, [dispatch, ingredientInfo]);
+	const location = useLocation();
 
 	const [, drag] = useDrag({
 		type: 'ingredient',
 		item: ingredientInfo,
 	});
 
-	const ingredientInfoModal = (
-		<Modal
-			onClose={handleCloseInfo}
-			header='Детали ингредиента'
-			className={clsx('pt-10 pl-10 pr-10 pb-15', s.modal)}>
-			<IngredientDetails ingredient={ingredientInfo as IngredientInfo} />
-		</Modal>
-	);
-
 	return (
-		<>
-			{isModalOpened && ingredientInfoModal}
-			<div
-				role='contentinfo'
-				className={s.card}
-				onClick={handleCardClick}
-				ref={drag}>
+		<Link
+			to={`ingredients/${ingredientInfo._id}`}
+			state={{ background: location }}
+			style={{ color: 'white' }}>
+			<div role='contentinfo' className={s.card} ref={drag}>
 				{!!ingredientInfo.count && (
 					<Counter
 						count={ingredientInfo.count}
@@ -73,7 +47,7 @@ const IngredientCard: FC<IngredientCardProps> = ({ ingredientInfo }) => {
 					{ingredientInfo.name}
 				</h4>
 			</div>
-		</>
+		</Link>
 	);
 };
 

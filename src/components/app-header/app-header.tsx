@@ -1,13 +1,14 @@
+import NavButton from '@components/app-header/components/nav-button/nav-button';
 import {
 	BurgerIcon,
 	ListIcon,
 	Logo,
 	ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import s from './app-header.module.scss';
-import React from 'react';
 import { clsx } from 'clsx';
-import NavButton from '@components/app-header/components/nav-button/nav-button';
+import React from 'react';
+
+import s from './app-header.module.scss';
 
 const AppHeader = () => {
 	return (
@@ -24,7 +25,7 @@ const AppHeader = () => {
 						Лента заказов
 					</NavButton>
 
-					<NavButton className={s.user}>
+					<NavButton className={s.user} to='/profile'>
 						<ProfileIcon type='secondary' />
 						Личный кабинет
 					</NavButton>
