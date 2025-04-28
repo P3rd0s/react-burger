@@ -24,11 +24,11 @@ const ConstructorDraggableElement: FC<{
 	const ref = useRef<HTMLLIElement>(null);
 
 	const reorderHandler = useCallback(
-		(item: IngredientInfo | { index: number }) => {
+		(item: IngredientInfo & { index: number }) => {
 			if (!ref.current || !('index' in item)) {
 				return;
 			}
-			const oldIndex = (item as any).index + 1;
+			const oldIndex = item.index + 1;
 			const newIndex = index + 1;
 			if (oldIndex === newIndex) {
 				return;
