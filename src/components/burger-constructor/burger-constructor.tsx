@@ -4,9 +4,10 @@ import {
 	addIngredient,
 	closeModal,
 	fetchOrder,
+	resetConstructor,
 } from '@services/burger-constructor';
 import { useAppDispatch, useAppSelector } from '@services/hooks';
-import { addIngredientCount } from '@services/ingredients';
+import { addIngredientCount, resetCounter } from '@services/ingredients';
 import Modal from '@shared/components/modal/modal';
 import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import {
@@ -41,7 +42,7 @@ const BurgerConstructor: FC = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 
-	const handleShowOrder = useCallback(() => {
+	const handleShowOrder = useCallback(async () => {
 		if (!bun) {
 			return;
 		}
@@ -50,7 +51,13 @@ const BurgerConstructor: FC = () => {
 			return;
 		}
 
-		dispatch(fetchOrder([bun._id, ...ingredients.map((i) => i._id)]));
+		const resultAction = await dispatch(
+			fetchOrder([bun._id, ...ingredients.map((i) => i._id)])
+		);
+		if (fetchOrder.fulfilled.match(resultAction)) {
+			dispatch(resetConstructor());
+			dispatch(resetCounter());
+		}
 	}, [bun, dispatch, ingredients, isAuthorized, navigate]);
 
 	const handleCloseOrder = useCallback(() => {

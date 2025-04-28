@@ -50,6 +50,9 @@ export const authSlice = createSlice({
 			}
 		});
 
+		builder.addCase(fetchUser.pending, (state) => {
+			state.isLoading = true;
+		});
 		builder.addCase(fetchUser.fulfilled, userInfoReducer);
 		builder.addCase(patchUser.fulfilled, userInfoReducer);
 	},

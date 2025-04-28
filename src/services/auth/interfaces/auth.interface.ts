@@ -2,6 +2,7 @@ export interface UserState {
 	email: string;
 	name: string;
 	isForgotCodeSent?: boolean;
+	isLoading?: boolean;
 }
 
 export interface LoginResponse {

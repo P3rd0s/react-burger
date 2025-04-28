@@ -6,7 +6,7 @@ import {
 	EmailInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { clsx } from 'clsx';
-import { FC, useCallback, useState } from 'react';
+import { FC, FormEvent, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const ForgotPassword: FC = () => {
@@ -15,12 +15,16 @@ const ForgotPassword: FC = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 
-	const handleForgotClick = useCallback(async () => {
-		const resultAction = await dispatch(sendCodeToEmail(email));
-		if (sendCodeToEmail.fulfilled.match(resultAction)) {
-			navigate('/reset-password');
-		}
-	}, [dispatch, email, navigate]);
+	const handleForgot = useCallback(
+		async (e: FormEvent) => {
+			e.preventDefault();
+			const resultAction = await dispatch(sendCodeToEmail(email));
+			if (sendCodeToEmail.fulfilled.match(resultAction)) {
+				navigate('/reset-password');
+			}
+		},
+		[dispatch, email, navigate]
+	);
 
 	return (
 		<div className={s.wrapper}>
@@ -29,22 +33,23 @@ const ForgotPassword: FC = () => {
 					Восстановление пароля
 				</h1>
 
-				<EmailInput
-					onChange={(e) => setEmail(e.target.value)}
-					value={email}
-					name={'email'}
-					isIcon={false}
-					extraClass='mb-6'
-				/>
+				<form className={s.form} onSubmit={handleForgot}>
+					<EmailInput
+						onChange={(e) => setEmail(e.target.value)}
+						value={email}
+						name={'email'}
+						isIcon={false}
+						extraClass='mb-6'
+					/>
 
-				<Button
-					htmlType='button'
-					type='primary'
-					size='medium'
-					extraClass='mb-20'
-					onClick={handleForgotClick}>
-					Восстановить
-				</Button>
+					<Button
+						htmlType='submit'
+						type='primary'
+						size='medium'
+						extraClass='mb-20'>
+						Восстановить
+					</Button>
+				</form>
 
 				<p className='text text_type_main-default text_color_inactive'>
 					Вспомнили пароль? &nbsp;

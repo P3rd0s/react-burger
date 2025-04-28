@@ -7,7 +7,7 @@ import {
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { clsx } from 'clsx';
-import { FC, useCallback, useState } from 'react';
+import { FC, FormEvent, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Login: FC = () => {
@@ -17,12 +17,16 @@ const Login: FC = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 
-	const handleLoginClick = useCallback(async () => {
-		const resultAction = await dispatch(login({ email, password }));
-		if (login.fulfilled.match(resultAction)) {
-			navigate('/');
-		}
-	}, [dispatch, email, navigate, password]);
+	const handleLogin = useCallback(
+		async (e: FormEvent) => {
+			e.preventDefault();
+			const resultAction = await dispatch(login({ email, password }));
+			if (login.fulfilled.match(resultAction)) {
+				navigate('/');
+			}
+		},
+		[dispatch, email, navigate, password]
+	);
 
 	return (
 		<div className={s.wrapper}>
@@ -31,29 +35,30 @@ const Login: FC = () => {
 					Вход
 				</h1>
 
-				<EmailInput
-					onChange={(e) => setEmail(e.target.value)}
-					value={email}
-					name={'email'}
-					isIcon={false}
-					extraClass='mb-6'
-				/>
+				<form className={s.form} onSubmit={handleLogin}>
+					<EmailInput
+						onChange={(e) => setEmail(e.target.value)}
+						value={email}
+						name={'email'}
+						isIcon={false}
+						extraClass='mb-6'
+					/>
 
-				<PasswordInput
-					onChange={(e) => setPassword(e.target.value)}
-					value={password}
-					name={'password'}
-					extraClass='mb-6'
-				/>
+					<PasswordInput
+						onChange={(e) => setPassword(e.target.value)}
+						value={password}
+						name={'password'}
+						extraClass='mb-6'
+					/>
 
-				<Button
-					htmlType='button'
-					type='primary'
-					size='medium'
-					extraClass='mb-20'
-					onClick={handleLoginClick}>
-					Войти
-				</Button>
+					<Button
+						htmlType='submit'
+						type='primary'
+						size='medium'
+						extraClass='mb-20'>
+						Войти
+					</Button>
+				</form>
 
 				<p className='text text_type_main-default text_color_inactive mb-4'>
 					Вы — новый пользователь? &nbsp;

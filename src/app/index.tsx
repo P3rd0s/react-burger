@@ -12,7 +12,7 @@ import { fetchUser } from '@services/auth/requests/auth.requests';
 import { useAppDispatch } from '@services/hooks';
 import { fetchIngredients } from '@services/ingredients';
 import Modal from '@shared/components/modal/modal';
-import ProtectedRoute from '@utils/components/protected-route';
+import ProtectedRoute from '@shared/components/protected-route/protected-route';
 import { clsx } from 'clsx';
 import React, { FC, useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
@@ -36,7 +36,7 @@ export const App: FC = () => {
 				<Route
 					path='/login'
 					element={
-						<ProtectedRoute isUnauthorizedOnly>
+						<ProtectedRoute anonymous>
 							<Login />
 						</ProtectedRoute>
 					}
@@ -44,7 +44,7 @@ export const App: FC = () => {
 				<Route
 					path='/register'
 					element={
-						<ProtectedRoute isUnauthorizedOnly>
+						<ProtectedRoute anonymous>
 							<Registration />
 						</ProtectedRoute>
 					}
@@ -52,7 +52,7 @@ export const App: FC = () => {
 				<Route
 					path='/forgot-password'
 					element={
-						<ProtectedRoute isUnauthorizedOnly>
+						<ProtectedRoute anonymous>
 							<ForgotPassword />
 						</ProtectedRoute>
 					}
@@ -60,7 +60,7 @@ export const App: FC = () => {
 				<Route
 					path='/reset-password'
 					element={
-						<ProtectedRoute isForgotPassword>
+						<ProtectedRoute anonymous>
 							<ResetPassword />
 						</ProtectedRoute>
 					}
@@ -68,7 +68,7 @@ export const App: FC = () => {
 				<Route
 					path='/profile'
 					element={
-						<ProtectedRoute isAuthOnly>
+						<ProtectedRoute>
 							<Profile />
 						</ProtectedRoute>
 					}>

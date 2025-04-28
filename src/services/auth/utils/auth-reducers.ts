@@ -24,5 +24,6 @@ export const userInfoReducer = (
 	if (action.payload?.success) {
 		state.name = action.payload.user.name;
 		state.email = action.payload.user.email;
+		state.isLoading = false;
 	}
 };

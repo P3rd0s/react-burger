@@ -7,7 +7,7 @@ import {
 	Input,
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { FC, useCallback, useState } from 'react';
+import { FC, FormEvent, useCallback, useState } from 'react';
 import { shallowEqual } from 'react-redux';
 
 const ProfileInfo: FC = () => {
@@ -28,18 +28,26 @@ const ProfileInfo: FC = () => {
 
 	const dispatch = useAppDispatch();
 
-	const handleSaveClick = useCallback(() => {
-		dispatch(patchUser({ name: username, email, password }));
-	}, [dispatch, email, password, username]);
+	const handleSave = useCallback(
+		(e: FormEvent) => {
+			e.preventDefault();
+			dispatch(patchUser({ name: username, email, password }));
+		},
+		[dispatch, email, password, username]
+	);
 
-	const handleCancelClick = useCallback(() => {
-		setEmail(initEmail);
-		setUsername(initName);
-		setPassword('');
-	}, [initEmail, initName]);
+	const handleCancel = useCallback(
+		(e: FormEvent) => {
+			e.preventDefault();
+			setEmail(initEmail);
+			setUsername(initName);
+			setPassword('');
+		},
+		[initEmail, initName]
+	);
 
 	return (
-		<>
+		<form onSubmit={handleSave} onReset={handleCancel}>
 			<Input
 				onChange={(e) => setUsername(e.target.value)}
 				value={username}
@@ -71,23 +79,18 @@ const ProfileInfo: FC = () => {
 					width: '100%',
 				}}>
 				<Button
-					htmlType='button'
+					htmlType='submit'
 					type='primary'
 					size='medium'
-					extraClass='ml-10'
-					onClick={handleSaveClick}>
+					extraClass='ml-10'>
 					Сохранить
 				</Button>
 
-				<Button
-					htmlType='button'
-					type='secondary'
-					size='medium'
-					onClick={handleCancelClick}>
+				<Button htmlType='reset' type='secondary' size='medium'>
 					Отмена
 				</Button>
 			</div>
-		</>
+		</form>
 	);
 };
 

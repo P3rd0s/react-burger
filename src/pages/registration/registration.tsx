@@ -8,7 +8,7 @@ import {
 	PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { clsx } from 'clsx';
-import { FC, useCallback, useState } from 'react';
+import { FC, FormEvent, useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Registration: FC = () => {
@@ -19,12 +19,16 @@ const Registration: FC = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 
-	const handleRegisterClick = useCallback(async () => {
-		const resultAction = await dispatch(register({ email, password, name }));
-		if (register.fulfilled.match(resultAction)) {
-			navigate('/');
-		}
-	}, [dispatch, email, name, navigate, password]);
+	const handleRegister = useCallback(
+		async (e: FormEvent) => {
+			e.preventDefault();
+			const resultAction = await dispatch(register({ email, password, name }));
+			if (register.fulfilled.match(resultAction)) {
+				navigate('/');
+			}
+		},
+		[dispatch, email, name, navigate, password]
+	);
 
 	return (
 		<div className={s.wrapper}>
@@ -33,37 +37,38 @@ const Registration: FC = () => {
 					Регистрация
 				</h1>
 
-				<Input
-					onChange={(e) => setName(e.target.value)}
-					value={name}
-					placeholder='Имя'
-					name={'username'}
-					extraClass='mb-6'
-				/>
+				<form className={s.form} onSubmit={handleRegister}>
+					<Input
+						onChange={(e) => setName(e.target.value)}
+						value={name}
+						placeholder='Имя'
+						name={'username'}
+						extraClass='mb-6'
+					/>
 
-				<EmailInput
-					onChange={(e) => setEmail(e.target.value)}
-					value={email}
-					name={'email'}
-					isIcon={false}
-					extraClass='mb-6'
-				/>
+					<EmailInput
+						onChange={(e) => setEmail(e.target.value)}
+						value={email}
+						name={'email'}
+						isIcon={false}
+						extraClass='mb-6'
+					/>
 
-				<PasswordInput
-					onChange={(e) => setPassword(e.target.value)}
-					value={password}
-					name={'password'}
-					extraClass='mb-6'
-				/>
+					<PasswordInput
+						onChange={(e) => setPassword(e.target.value)}
+						value={password}
+						name={'password'}
+						extraClass='mb-6'
+					/>
 
-				<Button
-					htmlType='button'
-					type='primary'
-					size='medium'
-					extraClass='mb-20'
-					onClick={handleRegisterClick}>
-					Зарегестрироваться
-				</Button>
+					<Button
+						htmlType='submit'
+						type='primary'
+						size='medium'
+						extraClass='mb-20'>
+						Зарегестрироваться
+					</Button>
+				</form>
 
 				<p className='text text_type_main-default text_color_inactive'>
 					Уже зарегистрированы? &nbsp;
