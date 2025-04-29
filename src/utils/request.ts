@@ -5,6 +5,8 @@ import { saveTokens } from '@utils/token-saver';
 
 const BASE_API_URL = 'https://norma.nomoreparties.space/api/';
 
+type ErrorMessage = { message: string };
+
 export const request = async (endpoint: string, options?: RequestInit) => {
 	let hasUnauthorizedError = false;
 
@@ -13,10 +15,10 @@ export const request = async (endpoint: string, options?: RequestInit) => {
 		if (data.success) {
 			return data;
 		}
-	} catch (error) {
+	} catch (error: unknown) {
 		console.error('Ошибка получения данных', error);
 
-		if ((error as any).message.includes('403')) {
+		if ((error as ErrorMessage).message.includes('403')) {
 			hasUnauthorizedError = true;
 		}
 	}
@@ -39,7 +41,7 @@ export const request = async (endpoint: string, options?: RequestInit) => {
 
 		return await innerRequest(endpoint, options);
 	} catch (error) {
-		console.error('Ошибка получения данных', (error as any).message);
+		console.error('Ошибка получения данных', (error as ErrorMessage).message);
 		return null;
 	}
 };
