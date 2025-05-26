@@ -1,9 +1,13 @@
 import AppHeader from '@components/app-header/app-header';
 import IngredientDetails from '@components/burger-ingredients/components/ingredient-section/components/ingredient-card/components/ingredient-details/ingredient-details';
+import OrderDetails from '@components/order-details/order-details';
 import ForgotPassword from '@pages/forgot-password/forgot-password';
 import Ingredient from '@pages/ingredient/ingredient';
 import Login from '@pages/login/login';
 import Main from '@pages/main/main';
+import OrderInfo from '@pages/order-info/order-info';
+import Orders from '@pages/orders/orders';
+import PersonalOrders from '@pages/profile/pages/personal-orders/personal-orders';
 import ProfileInfo from '@pages/profile/pages/profile-info/profile-info';
 import Profile from '@pages/profile/profile';
 import Registration from '@pages/registration/registration';
@@ -73,9 +77,23 @@ export const App: FC = () => {
 						</ProtectedRoute>
 					}>
 					<Route path='' element={<ProfileInfo />} />
+					<Route path='orders' element={<PersonalOrders />} />
 				</Route>
 
 				<Route path='/ingredients/:id' element={<Ingredient />} />
+
+				<Route path='/feed/:id' element={<OrderInfo />} />
+
+				<Route path='/feed' element={<Orders />} />
+
+				<Route
+					path='/profile/orders/:id'
+					element={
+						<ProtectedRoute>
+							<OrderInfo />
+						</ProtectedRoute>
+					}
+				/>
 
 				<Route
 					path='*'
@@ -97,6 +115,24 @@ export const App: FC = () => {
 								className={clsx('pt-10 pl-10 pr-10 pb-15', s.modal)}>
 								<IngredientDetails />
 							</Modal>
+						}
+					/>
+					<Route
+						path='/feed/:id'
+						element={
+							<Modal className={clsx('pt-10 pl-10 pr-10 pb-15', s.modal)}>
+								<OrderDetails />
+							</Modal>
+						}
+					/>
+					<Route
+						path='/profile/orders/:id'
+						element={
+							<ProtectedRoute>
+								<Modal className={clsx('pt-10 pl-10 pr-10 pb-15', s.modal)}>
+									<OrderDetails />
+								</Modal>
+							</ProtectedRoute>
 						}
 					/>
 				</Routes>

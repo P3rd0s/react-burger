@@ -1,0 +1,52 @@
+.cardWrapper {
+	display: block;
+	color: white;
+
+	&:hover {
+		color: white;
+	}
+}
+
+.card {
+	background: #1C1C21;
+	border-radius: 40px;
+	cursor: pointer;
+}
+
+.ingredientsInfo {
+	display: flex;
+	align-items: center;
+}
+
+.orderPrice {
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.icon {
+	width: 64px;
+	height: 64px;
+	margin-right: -16px;
+	border-radius: 50%;
+	border: 2px solid #4C4CFF;
+	background: #131316;
+	position: relative;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.iconOverlay {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background: #131316aa;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

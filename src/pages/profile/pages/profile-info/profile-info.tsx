@@ -47,7 +47,10 @@ const ProfileInfo: FC = () => {
 	);
 
 	return (
-		<form onSubmit={handleSave} onReset={handleCancel}>
+		<form
+			onSubmit={handleSave}
+			onReset={handleCancel}
+			style={{ maxWidth: '480px' }}>
 			<Input
 				onChange={(e) => setUsername(e.target.value)}
 				value={username}

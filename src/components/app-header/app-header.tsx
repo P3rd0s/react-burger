@@ -20,7 +20,7 @@ const AppHeader = () => {
 						Конструктор
 					</NavButton>
 
-					<NavButton>
+					<NavButton to='/feed'>
 						<ListIcon type='secondary' />
 						Лента заказов
 					</NavButton>

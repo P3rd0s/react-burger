@@ -1,0 +1,53 @@
+.card {
+	max-width: 640px;
+}
+
+.ingredientsInfo {
+	max-height: 450px;
+}
+
+.ingredientRow {
+	display: flex;
+	align-items: center;
+	gap: 10px
+}
+
+.ingredientTitle {
+	font-size: 16px;
+	font-weight: bold;
+	margin-right: auto;
+}
+
+.ingredientPrice {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+.orderPrice {
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.icon {
+	min-width: 64px;
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+	border: 2px solid #4C4CFF;
+	background: #131316;
+	position: relative;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.orderTotal {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
