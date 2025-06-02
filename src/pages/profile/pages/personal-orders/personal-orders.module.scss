@@ -1,0 +1,25 @@
+.orderList {
+	max-height: 75vh;
+	overflow: scroll;
+	padding-right: 10px;
+
+	& > * {
+		margin-bottom: 24px;
+	}
+}
+
+.ordersTables {
+	display: flex;
+}
+
+.ordersTable {
+	max-height: 340px;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.readyOrder {
+	color: #00cccc
+}

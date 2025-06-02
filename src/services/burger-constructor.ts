@@ -4,6 +4,8 @@ import {
 	nanoid,
 	PayloadAction,
 } from '@reduxjs/toolkit';
+import { getCookie } from '@services/auth/utils/cookie-handler';
+import { ACCESS_TOKEN } from '@shared/const/cookie-keys';
 import { IngredientInfo } from '@shared/interfaces/ingredient-info.interface';
 import { request } from '@utils/request';
 
@@ -30,7 +32,10 @@ export const fetchOrder = createAsyncThunk(
 	async (ingredients: string[]): Promise<OrderResponse | undefined | null> =>
 		await request('orders', {
 			method: 'POST',
-			headers: new Headers({ 'Content-Type': 'application/json' }),
+			headers: new Headers({
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + getCookie(ACCESS_TOKEN),
+			}),
 			body: JSON.stringify({ ingredients }),
 		})
 );

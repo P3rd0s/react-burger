@@ -32,7 +32,7 @@ const Profile: FC = () => {
 						}>
 						<li>Профиль</li>
 					</NavLink>
-					<li>История заказов</li>
+					<NavLink to='orders'>История заказов</NavLink>
 					<li onClick={handleLogout}>Выход</li>
 				</ul>
 
@@ -40,7 +40,7 @@ const Profile: FC = () => {
 					В этом разделе вы можете изменить свои персональные данные
 				</p>
 			</nav>
-			<div>
+			<div className={s.outlet}>
 				<Outlet />
 			</div>
 		</div>
