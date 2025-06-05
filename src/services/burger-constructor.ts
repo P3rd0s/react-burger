@@ -40,7 +40,7 @@ export const fetchOrder = createAsyncThunk(
 		})
 );
 
-const burgerConstructorSlice = createSlice({
+export const burgerConstructorSlice = createSlice({
 	name: 'burgerConstructor',
 	initialState,
 	reducers: {
